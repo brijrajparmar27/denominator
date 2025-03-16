@@ -1,0 +1,13 @@
+export interface {{Component}}Props {
+    children?: React.ReactNode;
+    className?: string;
+    // Add your props here
+}
+
+export interface {{Component}}State {
+    // Add your state interface here
+}
+
+export interface {{Component}}Styles {
+    // Add your styled-components props here
+} 

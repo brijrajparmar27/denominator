@@ -1,0 +1,9 @@
+.{{Component}} {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+}
+
+.{{Component}}__container {
+    /* Add your styles here */
+} 

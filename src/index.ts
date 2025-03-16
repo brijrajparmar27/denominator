@@ -11,9 +11,31 @@ const program = new Command();
 program.version(version);
 
 program
-    .option("-c --component <name>", "create a component")
-    .option("-ext --extension <ext>", "adds an extension for the file")
-    .action((args, flags) => {
-        createComponent(args.component, args.extension);
-    });
+  .command("generate")
+  .alias("g")
+  .description("Generate React components and related files")
+  .option("-c, --component <name>", "Component name")
+  .option(
+    "-t, --type <type>",
+    "Component type (functional|class|hook)",
+    "functional"
+  )
+  .option(
+    "-s, --style <framework>",
+    "Styling framework (css|scss|styled|tailwind)",
+    "css"
+  )
+  .option("-e, --ext <extension>", "File extension (js|jsx|ts|tsx)", "tsx")
+  .option("--test", "Generate test file", false)
+  .option("--story", "Generate Storybook story file", false)
+  .option("--doc", "Generate documentation file", false)
+  .option("--with-interface", "Generate TypeScript interface file", false)
+  .action((options) => {
+    if (!options.component) {
+      console.error("Component name is required");
+      process.exit(1);
+    }
+    createComponent(options);
+  });
+
 program.parse();
