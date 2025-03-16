@@ -4,7 +4,7 @@ import * as S from './{{Component}}.styles';
 
 export class {{Component}} extends Component<{{Component}}Props> {
     render() {
-        const { children } = this.props;
+        const { children, className } = this.props;
         
         return (
             <S.Container>

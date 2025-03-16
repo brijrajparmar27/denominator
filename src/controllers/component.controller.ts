@@ -43,8 +43,14 @@ export const createComponent = async (
     // Create component directory
     FileService.createDirIfNotExists(componentDir);
 
-    // Generate main component file
-    await generateComponentFile(componentDir, capitalizedName, type, ext);
+    // Generate main component file with style type
+    await generateComponentFile(
+      componentDir,
+      capitalizedName,
+      type,
+      ext,
+      style
+    );
 
     // Generate style file
     await generateStyleFile(componentDir, capitalizedName, style);
@@ -77,12 +83,38 @@ async function generateComponentFile(
   dir: string,
   name: string,
   type: string,
-  ext: string
+  ext: string,
+  styleType: string
 ): Promise<void> {
   const template = await FileService.readFile(
     path.join(__dirname, `../templates/${type}-component.${ext}`)
   );
-  const content = template!.replace(/{{Component}}/g, name);
+  let content = template!.replace(/{{Component}}/g, name);
+
+  // Handle different style types
+  if (styleType === "tailwind") {
+    content = content
+      .replace(
+        "<S.Container>",
+        `<div className={\`root-${name} \${className || ''}\`}>`
+      )
+      .replace("</S.Container>", "</div>");
+  } else if (styleType === "styled") {
+    // Keep the S.Container pattern
+    content = content.replace(
+      "<S.Container>",
+      "<S.Container className={className}>"
+    );
+  } else {
+    // For CSS and SCSS
+    content = content
+      .replace(
+        "<S.Container>",
+        `<div className={\`${name} \${className || ''}\`}>`
+      )
+      .replace("</S.Container>", "</div>");
+  }
+
   await FileService.createFile(path.join(dir, `${name}.${ext}`), content);
 }
 
@@ -91,7 +123,23 @@ async function generateStyleFile(
   name: string,
   styleType: string
 ): Promise<void> {
-  const extension = styleType === "styled" ? "ts" : styleType;
+  const extension =
+    styleType === "styled"
+      ? "ts"
+      : styleType === "tailwind"
+      ? "css"
+      : styleType;
+
+  if (styleType === "tailwind") {
+    // Create a simpler template for tailwind that won't cause syntax errors
+    const content = `/* Tailwind styles for ${name} */\n.root-${name} {\n  @apply p-4;\n}`;
+    await FileService.createFile(
+      path.join(dir, `${name}.styles.${extension}`),
+      content
+    );
+    return;
+  }
+
   const template = await FileService.readFile(
     path.join(__dirname, `../templates/styles/${styleType}.${extension}`)
   );
@@ -104,7 +152,7 @@ async function generateStyleFile(
 
 async function generateInterfaceFile(dir: string, name: string): Promise<void> {
   const template = await FileService.readFile(
-    path.join(__dirname, "../templates/interface.ts")
+    path.join(__dirname, "../templates/interface.ts.template")
   );
   const content = template!.replace(/{{Component}}/g, name);
   await FileService.createFile(path.join(dir, `${name}.types.ts`), content);

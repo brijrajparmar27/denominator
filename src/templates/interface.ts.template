@@ -1,3 +1,5 @@
+import React from 'react';
+
 export interface {{Component}}Props {
     children?: React.ReactNode;
     className?: string;

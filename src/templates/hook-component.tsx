@@ -15,7 +15,7 @@ const use{{Component}} = () => {
     };
 };
 
-export const {{Component}}: React.FC<{{Component}}Props> = ({ children }) => {
+export const {{Component}}: React.FC<{{Component}}Props> = ({ children, className }) => {
     const { state, setState } = use{{Component}}();
 
     return (

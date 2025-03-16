@@ -1,12 +1,11 @@
 import React from 'react';
 import { {{Component}}Props } from './{{Component}}.types';
-import * as S from './{{Component}}.styles';
 
-export const {{Component}}: React.FC<{{Component}}Props> = ({ children }) => {
+export const {{Component}}: React.FC<{{Component}}Props> = ({ children, className }) => {
     return (
-        <S.Container>
+        <div className={`root-{{Component}} ${className || ''}`}>
             {children}
-        </S.Container>
+        </div>
     );
 };
 

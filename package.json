@@ -2,20 +2,20 @@
   "name": "denominator",
   "version": "1.0.0",
   "description": "cli for generating component for react",
-  "main": "./src/index.js",
+  "main": "./dist/src/index.js",
   "scripts": {
-    "postbuild": "copyfiles ./src/templates/component/*.ext ./dist/",
+    "postbuild": "copyfiles \"./src/templates/**/*\" ./dist/",
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node ./dist/src/index.js",
     "init": "tsc --init",
-    "int": "npm i -g ./dist"
+    "int": "npm i -g ."
   },
   "keywords": [
     "cli"
   ],
   "bin": {
-    "damn": "./src/index.js"
+    "damn": "./dist/src/index.js"
   },
   "author": "Miten Gajjar",
   "license": "ISC",
